@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { notFound } from 'next/navigation'
 import { getGame } from '@/lib/store'
 import GamePlayer from './GamePlayer'
