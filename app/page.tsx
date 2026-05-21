@@ -344,21 +344,21 @@ export default function Home() {
             <span className="text-purple-400">{cardCount}</span>
             {selectedType === 'cards-against' && (
               <span className="text-white/30 text-sm font-normal ml-2">
-                + ~{Math.round(cardCount * 3.5)} response cards
+                + ~{Math.round(cardCount * 5)} response cards
               </span>
             )}
           </label>
           <input
             type="range"
-            min={selectedType === 'cards-against' ? 8 : 10}
+            min={selectedType === 'cards-against' ? 10 : 10}
             max={selectedType === 'cards-against' ? 30 : 40}
-            step={selectedType === 'cards-against' ? 4 : 5}
+            step={selectedType === 'cards-against' ? 5 : 5}
             value={cardCount}
             onChange={(e) => setCardCount(Number(e.target.value))}
             className="w-full accent-purple-500"
           />
           <div className="flex justify-between text-xs text-white/30 mt-1">
-            <span>{selectedType === 'cards-against' ? '8 prompts (quick)' : '10 (quick)'}</span>
+            <span>{selectedType === 'cards-against' ? '10 prompts (quick)' : '10 (quick)'}</span>
             <span>{selectedType === 'cards-against' ? '30 prompts (big deck)' : '40 (marathon)'}</span>
           </div>
         </div>
@@ -524,7 +524,7 @@ export default function Home() {
         <div className="glass rounded-2xl p-4 mb-6 space-y-2 text-sm">
           <SummaryRow label="Game" value={`${selectedTypeInfo?.emoji} ${selectedTypeInfo?.label}`} />
           <SummaryRow label="Content" value={CONTENT_LEVELS.find((c) => c.level === contentLevel)?.label ?? ''} />
-          <SummaryRow label="Cards" value={selectedType === 'cards-against' ? `${cardCount} prompts + ~${Math.round(cardCount * 3.5)} responses` : String(cardCount)} />
+          <SummaryRow label="Cards" value={selectedType === 'cards-against' ? `${cardCount} prompts + ~${Math.round(cardCount * 5)} responses` : String(cardCount)} />
           {selectedType === 'truth-or-dare' && cardFilter !== 'both' && (
             <SummaryRow label="Type" value={cardFilter === 'truths-only' ? '📖 Truths only' : '😈 Dares only'} />
           )}
@@ -547,7 +547,7 @@ export default function Home() {
           <h2 className="text-3xl font-black mb-3 gradient-text">Crafting your game...</h2>
           <p className="text-white/50 mb-8">
             {selectedType === 'cards-against'
-              ? `Generating ${cardCount} prompts and ~${Math.round(cardCount * 3.5)} response cards`
+              ? `Generating ${cardCount} prompts and ~${Math.round(cardCount * 5)} response cards`
               : `Generating ${cardCount} unique cards`}
           </p>
           <div className="flex gap-2 justify-center">

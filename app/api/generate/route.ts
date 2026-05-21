@@ -50,8 +50,17 @@ export async function POST(request: NextRequest) {
     let cards: GameCard[]
 
     if (config.type === 'cards-against') {
-      const prompts = (parsed.prompts as string[]) ?? []
-      const responses = (parsed.responses as string[]) ?? []
+      const dedup = (arr: string[]) => {
+        const seen = new Set<string>()
+        return arr.filter(s => {
+          const key = s.trim().toLowerCase()
+          if (seen.has(key)) return false
+          seen.add(key)
+          return true
+        })
+      }
+      const prompts = dedup((parsed.prompts as string[]) ?? [])
+      const responses = dedup((parsed.responses as string[]) ?? [])
       const promptCards: CardsAgainstCard[] = prompts.map((content) => ({
         id: nanoid(8),
         cardType: 'prompt',

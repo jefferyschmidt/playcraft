@@ -70,7 +70,7 @@ Each statement should describe a funny, relatable, or surprising scenario. Playe
 
     case 'cards-against': {
       const promptCount = cardCount
-      const responseCount = Math.round(cardCount * 3.5)
+      const responseCount = Math.round(cardCount * 5)
       return `Generate a Cards Against Humanity / Apples to Apples style card deck.
 
 Return JSON in this exact format:
@@ -119,7 +119,7 @@ Content level: ${contentDescriptions[config.contentLevel]}
 Theme/context: ${theme}${playerDetailsSection}
 Return ONLY valid JSON — no explanation, no markdown fences, just the raw JSON object.`
 
-  const responseCount = Math.round(cardCount * 3.5)
+  const responseCount = Math.round(cardCount * 5)
   const cardCountDesc = config.type === 'cards-against'
     ? `${cardCount} prompt cards (plus ~${responseCount} response cards)`
     : `${cardCount} cards`
