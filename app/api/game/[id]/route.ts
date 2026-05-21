@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getGame, updateGameCards } from '@/lib/store'
 import type { GameCard } from '@/lib/types'

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getState, saveState, createInitialState, emptyStats, bumpStat } from '@/lib/gameState'
 import { getGame } from '@/lib/store'
