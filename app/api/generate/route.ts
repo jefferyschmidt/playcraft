@@ -7,11 +7,15 @@ import { saveGame } from '@/lib/store'
 import { buildPrompt } from '@/lib/prompts'
 import type { GameConfig, Game, GameCard, CardsAgainstCard } from '@/lib/types'
 
-const client = new OpenAI()
+let client: OpenAI | null = null
+function getClient() {
+  if (!client) client = new OpenAI()
+  return client
+}
 
 async function callOpenAI(system: string, user: string): Promise<Record<string, unknown>> {
   for (let attempt = 1; attempt <= 3; attempt++) {
-    const response = await client.chat.completions.create({
+    const response = await getClient().chat.completions.create({
       model: 'gpt-4o-mini',
       response_format: { type: 'json_object' },
       messages: [
