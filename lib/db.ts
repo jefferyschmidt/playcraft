@@ -2,23 +2,22 @@ import { Pool } from 'pg'
 
 const globalForPg = globalThis as unknown as { pgPool?: Pool }
 
-function createPool(): Pool {
+/** Lazily creates the pool on first use — safe to import at build time */
+export function getPool(): Pool {
+  if (globalForPg.pgPool) return globalForPg.pgPool
   const connectionString = process.env.DATABASE_URL
   if (!connectionString) throw new Error('DATABASE_URL is not set')
-  return new Pool({
-    connectionString,
-    ssl: { rejectUnauthorized: false },
-    max: 10,
-  })
+  const p = new Pool({ connectionString, ssl: { rejectUnauthorized: false }, max: 10 })
+  if (process.env.NODE_ENV !== 'production') globalForPg.pgPool = p
+  return p
 }
 
-// Reuse pool across hot reloads in dev
-export const pool = globalForPg.pgPool ?? createPool()
-if (process.env.NODE_ENV !== 'production') globalForPg.pgPool = pool
+let schemaEnsured = false
 
-/** Ensure the tables exist (runs once on first use) */
+/** Idempotent: creates tables on first call */
 export async function ensureSchema(): Promise<void> {
-  await pool.query(`
+  if (schemaEnsured) return
+  await getPool().query(`
     CREATE TABLE IF NOT EXISTS games (
       id TEXT PRIMARY KEY,
       data JSONB NOT NULL,
@@ -30,4 +29,5 @@ export async function ensureSchema(): Promise<void> {
       updated_at TIMESTAMPTZ DEFAULT now()
     );
   `)
+  schemaEnsured = true
 }

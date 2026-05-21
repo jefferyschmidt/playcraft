@@ -1,8 +1,8 @@
-import { pool, ensureSchema } from './db'
+import { getPool, ensureSchema } from './db'
 import type { SharedGameState, PlayerStats } from './types'
 
 let schemaReady: Promise<void> | null = null
-function getSchema() {
+function ready() {
   if (!schemaReady) schemaReady = ensureSchema()
   return schemaReady
 }
@@ -22,15 +22,15 @@ export function bumpStat(s: PlayerStats, key: keyof PlayerStats, by = 1): Player
 }
 
 export async function getState(gameId: string): Promise<SharedGameState | null> {
-  await getSchema()
-  const result = await pool.query('SELECT data FROM game_states WHERE game_id = $1', [gameId])
+  await ready()
+  const result = await getPool().query('SELECT data FROM game_states WHERE game_id = $1', [gameId])
   if (result.rows.length === 0) return null
   return result.rows[0].data as SharedGameState
 }
 
 export async function saveState(gameId: string, state: SharedGameState): Promise<void> {
-  await getSchema()
-  await pool.query(
+  await ready()
+  await getPool().query(
     `INSERT INTO game_states (game_id, data) VALUES ($1, $2)
      ON CONFLICT (game_id) DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
     [gameId, JSON.stringify(state)]
